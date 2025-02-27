@@ -34,15 +34,6 @@ module.exports = (server) => {
             }
         },
         {
-            // Get posts by user
-            method: 'GET',
-            path: '/posts/user/{id}',
-            handler: BlogController.getPostsByUser,
-            options: {
-                auth: false
-            }
-        },
-        {
             // Create blogpost
             method: 'POST',
             path: '/posts',

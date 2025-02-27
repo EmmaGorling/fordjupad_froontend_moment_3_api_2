@@ -41,25 +41,6 @@ exports.getRecentPosts = async (request, h) => {
     }
 }
 
-// Get Blogposts by user id
-exports.getPostsByUser = async (request, h) => {
-    try {
-        const userId = request.params.userId;
-
-        const posts = await Blog.find({})
-                                .populate('author', 'firstName lastName email');
-        
-        const filterdPosts = posts.filter(post => post.author._id.equals(userId));
-
-        if(!filterdPosts || filterdPosts.length === 0) {
-            return h.response({ message: "Inga inlägg hittades för denna användare" }).code(404);
-        }
-
-        return h.response(filterdPosts).code(200);
-    } catch (error) {
-        return h.response({ message: error.message }).code(500);
-    }
-}
 
 // Add blogpost
 exports.createPost = async (request, h) => {

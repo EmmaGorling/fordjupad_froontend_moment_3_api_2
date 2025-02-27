@@ -14,6 +14,15 @@ exports.getUsers = async (request, h) => {
         return h.response({ message: error.message }).code(500);
     }
 }
+// Get user by id
+exports.getUserById = async (request, h) => {
+    try {
+        const user = await User.findById(request.params.id);
+        return h.response(user).code(200);
+    } catch (error) {
+        return h.response(error).code(500);
+    }
+};
 
 // Add a user
 exports.addUser = async (request, h) => {
@@ -79,7 +88,7 @@ exports.loginUser = async (request, h) => {
         // Generate token 
         const token = generateToken(user);
 
-        return h.response({ message: 'You are now logged in!', user: user }).state('jwt', token);
+        return h.response({ message: 'You are now logged in!', user: user, token }).state('jwt', token);
     } catch (error) {
         return h.response({ message: error.message }).code(500);
     }

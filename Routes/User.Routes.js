@@ -15,6 +15,15 @@ module.exports = (server) => {
             }
         }, 
         {
+            // Get user by id
+            method: 'GET',
+            path: '/users/{id}',
+            handler: userControllers.getUserById,
+            options: {
+                auth: false
+            }
+        },
+        {
             // Add user
             method: 'POST',
             path: '/users',

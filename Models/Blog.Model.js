@@ -12,11 +12,6 @@ const BlogSchema = new Mongoose.Schema(
             type: String,
             required: true
         },
-        author: {
-            type: Mongoose.Schema.ObjectId,
-            ref: User,      // Refer to the User-model
-            required: true
-        },
         createdAt: {
             type: Date,
             default: Date.now
