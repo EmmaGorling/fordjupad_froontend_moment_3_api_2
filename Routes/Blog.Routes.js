@@ -39,6 +39,7 @@ module.exports = (server) => {
             path: '/posts',
             handler: BlogController.createPost,
             options: {
+                auth: false,
                 validate: {
                     payload: Joi.object({
                         title: Joi.string().min(3).max(100).required(),
@@ -56,6 +57,7 @@ module.exports = (server) => {
             path: '/posts/{id}',
             handler: BlogController.updatePost,
             options: {
+                auth: false,
                 validate: {
                     payload: Joi.object({
                         title: Joi.string().min(3).max(100),
@@ -71,7 +73,10 @@ module.exports = (server) => {
             // Delete blog post
             method: 'DELETE',
             path: '/posts/{id}',
-            handler: BlogController.deletePost
+            handler: BlogController.deletePost,
+            options: {
+                auth: false
+            }
         }
     ])
 }

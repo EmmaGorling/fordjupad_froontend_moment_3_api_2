@@ -47,13 +47,19 @@ module.exports = (server) => {
             // Update user
             method: 'PUT',
             path: '/users/{id}',
-            handler: userControllers.updateUser
+            handler: userControllers.updateUser,
+            options: {
+                auth: false
+            }
         },
         {
             // Delete user
             method: 'DELETE',
             path: '/users/{id}',
-            handler: userControllers.deleteUser
+            handler: userControllers.deleteUser,
+            options: {
+                auth: false
+            }
         },
         {
             // Login user
@@ -86,7 +92,10 @@ module.exports = (server) => {
             // Validate token
             method: 'GET',
             path: '/users/validate',
-            handler: userControllers.validateToken
+            handler: userControllers.validateToken,
+            options: {
+                auth: false
+            }
         }]
     )
 }

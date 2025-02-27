@@ -47,6 +47,11 @@ exports.addUser = async (request, h) => {
 // Update user
 exports.updateUser = async (request, h) => {
     try {
+        const user = await validateToken(request.headers.authorization);
+
+        if(!user) {
+            return h.response({ message: 'Invalid user data or token' }).code(401);
+        }
         const updatedUser = await User.findByIdAndUpdate(request.params.id, request.payload, { new: true });
         return h.response(updatedUser).code(200);
     } catch (error) {
@@ -57,6 +62,11 @@ exports.updateUser = async (request, h) => {
 // Delete user 
 exports.deleteUser = async (request, h) => {
     try {
+        const user = await validateToken(request.headers.authorization);
+
+        if(!user) {
+            return h.response({ message: 'Invalid user data or token' }).code(401);
+        }
         await User.findByIdAndDelete(request.params.id);
         return h.response().code(204);
     } catch (error) {
@@ -124,3 +134,4 @@ const generateToken = (user) => {
     );
     return token;
 }
+

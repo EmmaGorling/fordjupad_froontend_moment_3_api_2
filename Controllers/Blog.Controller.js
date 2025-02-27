@@ -1,11 +1,12 @@
 "use strict"
 const Mongoose = require('mongoose');
 const Blog = require('../Models/Blog.Model');
+const { validateToken } = require('../validator');
 
 // Get all posts
 exports.getPosts = async (request, h) => {
     try {
-        const posts = await Blog.find().populate('author', 'firstName lastName email').sort({createdAt: -1});
+        const posts = await Blog.find().sort({createdAt: -1});
         return h.response(posts).code(200);
     } catch (error) {
         return h.response({ message: error.message }).code(500);
@@ -15,7 +16,7 @@ exports.getPosts = async (request, h) => {
 // Get post by id
 exports.getPostById = async (request, h) => {
     try {
-        const post = await Blog.findById(request.params.id).populate('author', 'firstName lastName email');
+        const post = await Blog.findById(request.params.id);
 
         if(!post) {
             return h.response({ message: "Post not found" }).code(404);
@@ -31,7 +32,6 @@ exports.getPostById = async (request, h) => {
 exports.getRecentPosts = async (request, h) => {
     try {
         const posts = await Blog.find({})
-            .populate('author', 'firstName lastName email')
             .sort({createdAt: -1})
             .limit(10);
 
@@ -46,9 +46,13 @@ exports.getRecentPosts = async (request, h) => {
 exports.createPost = async (request, h) => {
     try {
         const { title, content } = request.payload;
-        const userId = request.auth.credentials.user._id; // Get logged in user
+        const user = await validateToken(request.headers.authorization);
 
-        const newPost = new Blog({ title, content, author: userId });
+        if(!user) {
+            return h.response({ message: 'Invalid user data or token' }).code(401);
+        }
+
+        const newPost = new Blog({ title, content });
         const savedPost = await newPost.save();
 
         return h.response(savedPost).code(201);
@@ -57,20 +61,20 @@ exports.createPost = async (request, h) => {
     }
 }
 
-// Update post, only author
+// Update post
 exports.updatePost = async (request, h) => {
     try {
         const post = await Blog.findById(request.params.id);
-        const userId = request.auth.credentials.user._id;
+        const user = await validateToken(request.headers.authorization);
+
+        if(!user) {
+            return h.response({ message: 'Invalid user data or token' }).code(401);
+        }
 
         if(!post) {
             return h.response({ message: "Post not found" }).code(404);
         }
 
-        // Controll if the user is the author
-        if (post.author.toString() !== userId) {
-            return h.response({ message: "Unauthorized" }).code(403);
-        }
 
         post.title = request.payload.title || post.title;
         post.content = request.payload.content || post.content;
@@ -83,20 +87,20 @@ exports.updatePost = async (request, h) => {
     }
 }
 
-// Delete blogpost, only author
+// Delete blogpost
 exports.deletePost = async (request, h) => {
     try {
         const post = await Blog.findById(request.params.id);
-        const userId = request.auth.credentials.user._id;
+        const user = await validateToken(request.headers.authorization);
+
+        if(!user) {
+            return h.response({ message: 'Invalid user data or token' }).code(401);
+        }
 
         if(!post) {
             return h.response({ message: "Post not found" }).code(404);
         }
 
-        // Controll if the user is the author
-        if (post.author.toString() !== userId) {
-            return h.response({ message: "Unauthorized" }).code(403);
-        }
 
         await post.deleteOne();
         return h.response({ message: "Post deleted successfully" }).code(200);
