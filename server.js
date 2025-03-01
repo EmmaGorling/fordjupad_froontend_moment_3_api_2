@@ -6,7 +6,7 @@ require('dotenv').config();
 const init = async () => {
     const server = Hapi.server({
         port: process.env.PORT || 3000,
-        host: 'localhost',
+        host: '0.0.0.0',
         routes: {
             cors: {
                 origin: ['http://localhost:5500', 'https://www.thunderclient.com', 'http://localhost:5173', 'https://forjupad-frontend-moment-3-api.onrender.com'],
