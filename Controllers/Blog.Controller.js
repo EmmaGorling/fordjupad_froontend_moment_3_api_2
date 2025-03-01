@@ -28,12 +28,12 @@ exports.getPostById = async (request, h) => {
     }
 }
 
-// Get 10 recent posts
+// Get 6 recent posts
 exports.getRecentPosts = async (request, h) => {
     try {
         const posts = await Blog.find({})
             .sort({createdAt: -1})
-            .limit(10);
+            .limit(6);
 
             return h.response(posts).code(200);
     } catch (error) {
