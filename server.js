@@ -9,7 +9,7 @@ const init = async () => {
         host: '0.0.0.0',
         routes: {
             cors: {
-                origin: ['https://emad2301-fordjupad-frontend-3.netlify.app/', 'http://localhost:5500', 'https://www.thunderclient.com', 'http://localhost:5173', 'https://forjupad-frontend-moment-3-api.onrender.com'],
+                origin: ['https://emad2301-fordjupad-frontend-3.netlify.app', 'http://localhost:5500', 'https://www.thunderclient.com', 'http://localhost:5173', 'https://forjupad-frontend-moment-3-api.onrender.com'],
                 credentials: true, // Cookies
                 maxAge: 86400,
                 headers: ["Accept", "Content-Type", "Access-Control-Allow-Origin", "Authorization"]
