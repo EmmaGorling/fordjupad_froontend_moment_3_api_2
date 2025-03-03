@@ -27,6 +27,13 @@ const init = async () => {
     await auth.register(server);
 
     // Routes
+    server.route({
+        method: 'OPTIONS',
+        path: '/{any*}',
+        handler: (request, h) => {
+            return h.response().code(200);
+        }
+    });
     require('./Routes/User.Routes')(server);
     require('./Routes/Blog.Routes')(server);
 
